@@ -74,3 +74,68 @@ References
 - www.tutorialspoint.com
 - C++ Reference Documentation
 - MySQL Documentation (for concept study)
+code:
+#include <iostream>
+#include <fstream>
+#include <iomanip>
+using namespace std;
+class Stock {
+int productID;
+string name;
+int quantity;
+float price;
+public:
+void addProduct() {
+cout << "Enter Product ID: "; cin >> productID;
+cout << "Enter Product Name: "; cin >> name;
+cout << "Enter Quantity: "; cin >> quantity;
+cout << "Enter Price: "; cin >> price;
+ofstream fout("stock.txt", ios::app);
+fout << productID << " " << name << " " << quantity << " " <<
+price << endl;
+fout.close();
+cout << "Product Added Successfully!" << endl;
+}
+void displayProducts() {
+ifstream fin("stock.txt");
+cout << left << setw(10) << "ID" << setw(15) << "Name" <<
+setw(10) << "Qty" << setw(10) << "Price" << endl;
+while (fin >> productID >> name >> quantity >> price) {
+cout << left << setw(10) << productID << setw(15) << name
+<< setw(10) << quantity << setw(10) << price << endl;
+}
+fin.close();
+}
+void searchProduct() {
+int id, found = 0;
+cout << "Enter Product ID to Search: "; cin >> id;
+ifstream fin("stock.txt");
+while (fin >> productID >> name >> quantity >> price) {
+if (productID == id) {
+cout << "Product Found: " << name << " | Qty: " <<
+quantity << " | Price: " << price << endl;
+found = 1;
+break;
+}
+}
+if (!found) cout << "Product Not Found!" << endl;
+fin.close();
+}
+};
+int main() {
+Stock s;
+int choice;
+do {
+cout << "\n1. Add Product\n2. Display Products\n3. Search
+Product\n4. Exit\nEnter choice: ";
+cin >> choice;
+switch(choice) {
+case 1: s.addProduct(); break;
+case 2: s.displayProducts(); break;
+case 3: s.searchProduct(); break;
+case 4: cout << "Exiting..."; break;
+default: cout << "Invalid Choice!";
+}
+} while(choice != 4);
+return 0;
+}
